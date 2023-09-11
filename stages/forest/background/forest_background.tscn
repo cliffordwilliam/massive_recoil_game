@@ -1,0 +1,110 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://stages/forest/images/tree.png" type="Texture" id=1]
+[ext_resource path="res://stages/forest/images/canopy_cover.png" type="Texture" id=2]
+[ext_resource path="res://stages/forest/images/canopy.png" type="Texture" id=3]
+[ext_resource path="res://stages/forest/scripts/forest_background.gd" type="Script" id=4]
+[ext_resource path="res://stages/forest/images/sky.png" type="Texture" id=5]
+[ext_resource path="res://stages/forest/images/top_glow.png" type="Texture" id=6]
+[ext_resource path="res://stages/forest/images/bottom_glow.png" type="Texture" id=7]
+
+[node name="forest_background" type="ParallaxBackground"]
+layer = -1
+script = ExtResource( 4 )
+__meta__ = {
+"_editor_description_": "scale 0 = offset is half of viewport
+
+offset is negative
+
+scale 0 = offset -320
+scale 1 = offset 0
+
+scale 0.05 = offset -320 * 0.95"
+}
+
+[node name="sky" type="ParallaxLayer" parent="."]
+unique_name_in_owner = true
+motion_scale = Vector2( 0, 0 )
+motion_offset = Vector2( -320, -180 )
+motion_mirroring = Vector2( 640, 0 )
+
+[node name="sprite" type="Sprite" parent="sky"]
+texture = ExtResource( 5 )
+centered = false
+
+[node name="canopy_cover" type="ParallaxLayer" parent="."]
+unique_name_in_owner = true
+motion_scale = Vector2( 0, 0 )
+motion_offset = Vector2( -320, -180 )
+motion_mirroring = Vector2( 640, 0 )
+
+[node name="sprite" type="Sprite" parent="canopy_cover"]
+texture = ExtResource( 2 )
+centered = false
+
+[node name="canopy" type="ParallaxLayer" parent="."]
+unique_name_in_owner = true
+motion_scale = Vector2( 0.05, 0 )
+motion_offset = Vector2( -304, -180 )
+motion_mirroring = Vector2( 640, 0 )
+__meta__ = {
+"_editor_description_": ""
+}
+
+[node name="sprite" type="Sprite" parent="canopy"]
+position = Vector2( 0, -96 )
+texture = ExtResource( 3 )
+centered = false
+
+[node name="sprite2" type="Sprite" parent="canopy"]
+position = Vector2( 320, -96 )
+texture = ExtResource( 3 )
+centered = false
+
+[node name="tall_trees" type="ParallaxLayer" parent="."]
+unique_name_in_owner = true
+motion_scale = Vector2( 0.5, 0 )
+motion_offset = Vector2( -160, -180 )
+motion_mirroring = Vector2( 640, 0 )
+
+[node name="sprite" type="Sprite" parent="tall_trees"]
+position = Vector2( 0, 32 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="sprite2" type="Sprite" parent="tall_trees"]
+position = Vector2( 192, 96 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="sprite3" type="Sprite" parent="tall_trees"]
+position = Vector2( 416, 0 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="top_light" type="ParallaxLayer" parent="."]
+unique_name_in_owner = true
+motion_scale = Vector2( 1.05, 1 )
+motion_offset = Vector2( 16, 0 )
+motion_mirroring = Vector2( 640, 0 )
+__meta__ = {
+"_editor_description_": "scale 0 = offset -320
+scale 0.05 = offset -320 * 0.95
+scale 1 = offset 0
+scale 1.05 = offset 320 * 0.05"
+}
+
+[node name="sprite" type="Sprite" parent="top_light"]
+texture = ExtResource( 6 )
+centered = false
+
+[node name="glow" type="ParallaxLayer" parent="."]
+unique_name_in_owner = true
+motion_scale = Vector2( 0, 0 )
+motion_offset = Vector2( -320, -180 )
+motion_mirroring = Vector2( 640, 0 )
+
+[node name="sprite" type="Sprite" parent="glow"]
+position = Vector2( 0, 96 )
+texture = ExtResource( 7 )
+centered = false
