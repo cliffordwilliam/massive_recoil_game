@@ -1,12 +1,12 @@
 extends KinematicBody2D
 
 
+# for cutscene player to use (indirectly through me)
+onready var remote_transform: RemoteTransform2D = $"%remote_transform_2d"
+
 # refs
 onready var sprite: Sprite = $"%sprite"
 onready var animator: AnimationPlayer = $"%animation_player"
-
-enum FACING_DIRECTION { LEFT, RIGHT }
-export(FACING_DIRECTION) var facing_direction = FACING_DIRECTION.RIGHT
 
 # movement constants
 const MAX_HORIZONTAL_VELOCITY: float = 180.0
@@ -27,13 +27,11 @@ var old_sprite_scale_x: int = 1
 var direction: int = 0
 var velocity: Vector2 = Vector2.ZERO
 
+# controllable
+var is_controllable: bool = false
+
 
 func _ready() -> void:
-	# set direction based on facing direction export
-	if facing_direction == FACING_DIRECTION.RIGHT:
-		direction = 1
-	elif facing_direction == FACING_DIRECTION.LEFT:
-		direction = -1
 	# player always start at idle state, no need to play intro idle anim
 	animator.play("idle")
 	# add myself to shared autoload
@@ -52,7 +50,8 @@ func _physics_process(_delta: float) -> void:
 	if direction != 0:
 		sprite.scale.x = direction
 	# get horizontal input
-	direction = int(Input.get_axis("left", "right"))
+	if is_controllable:
+		direction = int(Input.get_axis("left", "right"))
 	
 	# handle state
 	# idle
@@ -104,3 +103,20 @@ func _on_animation_player_animation_finished(anim_name: String) -> void:
 		animator.play("idle")
 	elif anim_name == "turn":
 		animator.play("run")
+
+
+# for cutscene player to use
+func detach_camera() -> void:
+	remote_transform.remote_path = ""
+	
+	
+func attach_camera() -> void:
+	remote_transform.remote_path = remote_transform.get_path_to(Shared.camera)
+	
+	
+func remove_control() -> void:
+	is_controllable = false
+	
+	
+func return_control() -> void:
+	is_controllable = true

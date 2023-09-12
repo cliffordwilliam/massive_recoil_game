@@ -169,4 +169,11 @@ next_room = "res://stages/forest/rooms/room_1.tscn"
 position = Vector2( 0, 320 )
 scale = Vector2( 20, 2 )
 
+[node name="spawn_point" type="Position2D" parent="."]
+unique_name_in_owner = true
+position = Vector2( 288, 249 )
+__meta__ = {
+"_editor_description_": "when the player first fresh start the game, this is where they spawn."
+}
+
 [connection signal="tree_exiting" from="." to="." method="_on_room_0_tree_exiting"]

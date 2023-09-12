@@ -1,13 +1,16 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://world/world.gd" type="Script" id=1]
 [ext_resource path="res://camera/camera.tscn" type="PackedScene" id=2]
+[ext_resource path="res://cutscene_player/cutscene_player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://world/curtain.gd" type="Script" id=4]
 [ext_resource path="res://ryoko/ryoko.tscn" type="PackedScene" id=5]
+[ext_resource path="res://stages/forest/stage_title/stage_title.tscn" type="PackedScene" id=6]
 
 [sub_resource type="Animation" id=1]
 length = 0.001
 tracks/0/type = "value"
-tracks/0/path = NodePath("color_rect:color")
+tracks/0/path = NodePath("curtain:color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -16,7 +19,24 @@ tracks/0/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Color( 0, 0, 0, 0 ) ]
+"values": [ Color( 0, 0, 0, 1 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "intro_fade_out_curtain_from_black"
+length = 0.833333
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/path = NodePath("curtain:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.0833333, 0.833333 ),
+"transitions": PoolRealArray( 1, 2, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 0 ) ]
 }
 
 [sub_resource type="Animation" id=2]
@@ -24,7 +44,7 @@ resource_name = "room_fade"
 length = 0.133333
 step = 0.0166667
 tracks/0/type = "value"
-tracks/0/path = NodePath("color_rect:color")
+tracks/0/path = NodePath("curtain:color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -58,29 +78,35 @@ Holds the player, rooms and other gameplay nodes."
 }
 
 [node name="ryoko" parent="." instance=ExtResource( 5 )]
-position = Vector2( 288, 249 )
 __meta__ = {
 "_editor_description_": ""
 }
-facing_direction = 0
 
 [node name="remote_transform_2d" parent="ryoko/sprite" index="0"]
 remote_path = NodePath("../../../camera")
 
 [node name="camera" parent="." instance=ExtResource( 2 )]
 unique_name_in_owner = true
-position = Vector2( 352, 249 )
+position = Vector2( 64, 0 )
 
-[node name="curtain" type="CanvasLayer" parent="."]
+[node name="curtain_layer" type="CanvasLayer" parent="."]
 
-[node name="color_rect" type="ColorRect" parent="curtain"]
+[node name="curtain" type="ColorRect" parent="curtain_layer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0, 0, 0, 0 )
+color = Color( 0, 0, 0, 1 )
 
-[node name="animation_player" type="AnimationPlayer" parent="curtain"]
+[node name="curtain_animator" type="AnimationPlayer" parent="curtain_layer"]
 unique_name_in_owner = true
 anims/RESET = SubResource( 1 )
+anims/intro_fade_out_curtain_from_black = SubResource( 3 )
 anims/room_fade = SubResource( 2 )
+script = ExtResource( 4 )
+
+[node name="cutscene_player" parent="." instance=ExtResource( 3 )]
+
+[node name="stage_title_layer" type="CanvasLayer" parent="."]
+
+[node name="stage_title" parent="stage_title_layer" instance=ExtResource( 6 )]
 
 [editable path="ryoko"]

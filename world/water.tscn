@@ -81,7 +81,7 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
 shader_param/scale = Vector2( 20, 2 )
-shader_param/y_zoom = 1.5874
+shader_param/y_zoom = 1.05946
 shader_param/water_color = Color( 0.352941, 0.647059, 0.701961, 0.333333 )
 shader_param/distortion_scale = Vector2( 0.1, 0.9 )
 shader_param/intensity = 0.05

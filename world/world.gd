@@ -9,7 +9,7 @@ var room_scene: PackedScene = preload("res://stages/forest/rooms/room_0.tscn")
 var background_scene: PackedScene = preload("res://stages/forest/background/forest_background.tscn")
 
 onready var camera: Camera2D = $"%camera"
-onready var curtain_animator: AnimationPlayer = $"%animation_player"
+onready var curtain_animator: AnimationPlayer = $"%curtain_animator"
 
 # for room switching
 var room : Node2D
@@ -18,19 +18,26 @@ var next_room: PackedScene setget set_new_room
 
 # handle the first spawn, either in save room or starting intro position
 func _ready() -> void:
+	# the following is for starting the game for the first time
 	# instance the first room
 	room = room_scene.instance()
 	add_child(room)
 	# instance the first background
 	var background: ParallaxBackground = background_scene.instance()
 	add_child(background)
+	# position ryoko to spawn point, make her face left
+	Shared.ryoko.global_position = room.spawn_point.global_position
+	Shared.ryoko.sprite.scale.x = -1
 	# update camera to room limit
+	update_camera_limit()
+	# play intro cutscene (will set camera to its cutscene starting location)
+	Shared.cutscene_player.play("intro")
+
+
+# uses the room reference rect
+func update_camera_limit() -> void:
+	# get room limit
 	var room_camera_limit: ReferenceRect = room.get_node("camera_limits")
-	_update_camera_limit(room_camera_limit)
-
-
-# takes in the room reference rect
-func _update_camera_limit(room_camera_limit) -> void:
 	# get room camera limit data
 	var room_camera_limit_left: int = room_camera_limit.rect_position.x
 	var room_camera_limit_top: int = room_camera_limit.rect_position.y
@@ -59,6 +66,13 @@ func switch_room() -> void:
 	# instance the next room and update room
 	room = next_room.instance()
 	add_child(room)
-	# update camera to room limit
-	var room_camera_limit: ReferenceRect = room.get_node("camera_limits")
-	_update_camera_limit(room_camera_limit)
+	update_camera_limit()
+
+
+# func for cutscene player to use
+
+func remove_camera_limit() -> void:
+	camera.limit_left = -10000000
+	camera.limit_top = -10000000
+	camera.limit_right = 10000000
+	camera.limit_bottom = 10000000

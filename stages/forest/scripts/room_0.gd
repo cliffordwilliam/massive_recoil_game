@@ -2,6 +2,9 @@ extends Node2D
 # this room removes the canopy and top light
 
 
+onready var spawn_point: Position2D = $"%spawn_point"
+
+
 func _ready() -> void:
 	# wait for everyone to be ready
 	if not Shared.forest_background:
