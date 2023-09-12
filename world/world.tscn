@@ -58,17 +58,18 @@ Holds the player, rooms and other gameplay nodes."
 }
 
 [node name="ryoko" parent="." instance=ExtResource( 5 )]
-position = Vector2( 256, 249 )
+position = Vector2( 288, 249 )
 __meta__ = {
 "_editor_description_": ""
 }
+facing_direction = 0
 
 [node name="remote_transform_2d" parent="ryoko/sprite" index="0"]
 remote_path = NodePath("../../../camera")
 
 [node name="camera" parent="." instance=ExtResource( 2 )]
 unique_name_in_owner = true
-position = Vector2( 320, 249 )
+position = Vector2( 352, 249 )
 
 [node name="curtain" type="CanvasLayer" parent="."]
 

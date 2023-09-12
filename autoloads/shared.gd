@@ -4,6 +4,9 @@ extends Node
 # tree to get current scene, root, create tweens and timers
 onready var tree: SceneTree = get_tree()
 
+# camera
+var camera
+
 # player
 var ryoko
 

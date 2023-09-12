@@ -2,4 +2,4 @@ extends Camera2D
 
 
 func _ready() -> void:
-	pass
+	Shared.camera = self

@@ -5,6 +5,9 @@ extends KinematicBody2D
 onready var sprite: Sprite = $"%sprite"
 onready var animator: AnimationPlayer = $"%animation_player"
 
+enum FACING_DIRECTION { LEFT, RIGHT }
+export(FACING_DIRECTION) var facing_direction = FACING_DIRECTION.RIGHT
+
 # movement constants
 const MAX_HORIZONTAL_VELOCITY: float = 180.0
 const HORIZONTAL_WEIGHT: float = 0.2  # movement uses lerp
@@ -26,6 +29,11 @@ var velocity: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
+	# set direction based on facing direction export
+	if facing_direction == FACING_DIRECTION.RIGHT:
+		direction = 1
+	elif facing_direction == FACING_DIRECTION.LEFT:
+		direction = -1
 	# player always start at idle state, no need to play intro idle anim
 	animator.play("idle")
 	# add myself to shared autoload

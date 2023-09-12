@@ -23,6 +23,6 @@ func _ready() -> void:
 		collider.set_shape(vertical_shape)
 
 
-func _on_area_2d_body_entered(_ryoko: Node) -> void:
+func _on_door_body_entered(_ryoko: Node) -> void:
 	# this activates the setter
 	Shared.tree.current_scene.next_room = next_room

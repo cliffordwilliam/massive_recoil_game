@@ -1,0 +1,103 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://water/water.gd" type="Script" id=1]
+[ext_resource path="res://water/white_tile.png" type="Texture" id=2]
+[ext_resource path="res://water/noise.png" type="Texture" id=3]
+
+[sub_resource type="Shader" id=1]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+
+// handle scaling, reload object if it is not working as intended
+uniform vec2 scale;  // passed by the water script scale signal
+
+// handle zoom
+uniform float y_zoom; // passed from water script
+
+// to be mixed with reflection texture
+uniform vec4 water_color : hint_color;
+
+// noise texture
+uniform sampler2D noise_img;
+uniform vec2 distortion_scale;
+uniform float intensity;
+uniform float speed;
+
+// wave
+uniform float wave_amplitude;
+uniform float wave_speed;
+uniform float wave_period;
+
+// perspective
+uniform float correction_strenght;
+
+// water texture sparkles
+uniform float water_texture_limit;
+
+
+void fragment() {
+    //wave
+    float waves = UV.y * scale.y + sin(UV.x * scale.x / wave_period + TIME * wave_speed) * cos(0.2 * UV.x * scale.x / wave_period + TIME * wave_speed) * wave_amplitude - wave_amplitude;
+
+    // calculate the border color based on the height of the wave
+    vec3 border_color = vec3(0.7725, 0.8275, 0.8431);
+    float border = smoothstep(0.0, 0.01, waves - 0.2);
+
+	// calculate perspective correction absed on x coord
+	float perspectiveCorrection = correction_strenght * (0.5 - UV.x) * UV.y;
+
+    // noise
+    float distortion = texture(noise_img, UV * scale * distortion_scale + TIME * speed).x;
+    distortion -= 0.5;
+
+    // sample screen texture above me of the same size, then flip it, store it as reflected texture
+    // apply distortion to x and handle zoom and scale for y
+    float uv_height = SCREEN_PIXEL_SIZE.y / TEXTURE_PIXEL_SIZE.y;
+    vec2 reflected_screen_uv = vec2(SCREEN_UV.x - distortion * intensity * y_zoom + perspectiveCorrection, SCREEN_UV.y + uv_height * UV.y * scale.y * y_zoom * 2.0);
+    vec4 reflection_texture = texture(SCREEN_TEXTURE, reflected_screen_uv);
+
+	// water texture sparkles
+	vec4 water_texture = texture(noise_img, UV * vec2(0.5, 4.0) + vec2(distortion, 0.0));
+	float water_texture_value = (water_texture.x < water_texture_limit) ? 1.0 : 0.0;
+
+
+	COLOR.xyz = vec3(water_texture_value);
+
+    // mix the reflection texture color with the water color, considering the border color
+    COLOR.rgb = mix(reflection_texture.rgb, water_color.rgb, water_color.a);
+	
+	// mix highlight with final color
+	COLOR.rgb = mix(COLOR.rgb, border_color, water_texture_value);
+    
+    // apply the border color
+    COLOR.rgb = mix(border_color, COLOR.rgb, border);
+    
+    // set the alpha based on the waves
+    COLOR.a = smoothstep(0.1, 0.13, waves);
+}
+"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/scale = Vector2( 20, 2 )
+shader_param/y_zoom = 1.5874
+shader_param/water_color = Color( 0.352941, 0.647059, 0.701961, 0.333333 )
+shader_param/distortion_scale = Vector2( 0.1, 0.9 )
+shader_param/intensity = 0.05
+shader_param/speed = 0.01
+shader_param/wave_amplitude = 0.03
+shader_param/wave_speed = 1.0
+shader_param/wave_period = 0.4
+shader_param/correction_strenght = 0.3
+shader_param/water_texture_limit = 0.25
+shader_param/noise_img = ExtResource( 3 )
+
+[node name="water" type="Sprite"]
+material = SubResource( 2 )
+z_index = 2
+texture = ExtResource( 2 )
+centered = false
+script = ExtResource( 1 )
+
+[connection signal="item_rect_changed" from="." to="." method="_on_water_item_rect_changed"]
