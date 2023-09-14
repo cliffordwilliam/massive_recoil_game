@@ -13,11 +13,7 @@ onready var typer: AnimationPlayer = $"%typer"
 # travel through the sentences
 var sentence_index: int = 0
 # this is supposed to be passed by someone outside not here (the values)
-var sentences: Array = [
-	"Hellooooooooooo",
-	"Hey",
-	"Yooo"
-]
+var sentences: Array
 
 # tween
 var old_background_global_position: Vector2
@@ -31,6 +27,11 @@ func _ready() -> void:
 	background_tween.visible = false
 	# hide the indicator too
 	indicator.visible = false
+	# hide myself and scale me to 0, need to activate to revert this
+	visible = false
+	rect_scale = Vector2.ZERO
+	# input is false until the pop up anim is finished from activate func
+	set_process_input(false)
 
 
 # attach myself to parent's text box tail
@@ -65,10 +66,12 @@ func _process(delta: float) -> void:
 		background.visible = false
 		background_tween.visible = true
 		# tween the background tween from old to new position
-		# do not move actors during tweening
-		var tw = create_tween().set_parallel()
-		tw.tween_property(background_tween, "rect_global_position", background.rect_global_position, 0.1).from(old_background_global_position).set_trans(Tween.TRANS_LINEAR)
-		tw.tween_property(background_tween, "rect_size", background.rect_size, 0.1).from(old_background_size).set_trans(Tween.TRANS_LINEAR)
+		var tw = create_tween()
+		# no need to tween the position, tween the min_size and set the grow to either sides. This way it can grow on the move
+		tw.tween_property(background_tween, "rect_min_size", background.rect_size, 0.1).from(old_background_size).set_trans(Tween.TRANS_LINEAR)
+		# if this is the first sentence, I need to tween from scale 0
+		if sentence_index == 1:
+			tw.set_parallel().tween_property(self, "rect_scale", Vector2.ONE, 0.1).from(Vector2.ZERO).set_trans(Tween.TRANS_LINEAR)
 		tw.connect("finished", self, "_on_tween_finished")
 		# update old background size to updated value
 		old_background_size = background.rect_size
@@ -105,6 +108,19 @@ func type_letter() -> void:
 		indicator.visible = true
 		
 
+# called by cutscene player, wakes me up and give me my sentences
+func activate(given_sentences) -> void:
+	sentences = given_sentences
+	visible = true
+	# show parent text box tail
+	parent.text_box_tail.visible = true
+	# turn on input and set the next first sentence
+	set_process_input(true)
+	set_next_sentence(sentences[sentence_index])
+	sentence_index += 1
+	
+	
+
 # DEBUG
 func _input(event: InputEvent) -> void:
 	# player press accept
@@ -114,4 +130,16 @@ func _input(event: InputEvent) -> void:
 			# send new sentence to func and update the sentence counter
 			set_next_sentence(sentences[sentence_index])
 			sentence_index += 1
-		# no more sentence to say then tell cutscene player to continue its timeline
+		elif sentence_index == len(sentences):
+			# tween root from scale 1 to 0
+			var tw = create_tween()
+			# no need to tween the position, tween the min_size and set the grow to either sides. This way it can grow on the move
+			tw.tween_property(self, "rect_scale", Vector2.ZERO, 0.2).from(Vector2.ONE).set_trans(Tween.TRANS_LINEAR)
+			tw.connect("finished", self, "_on_deactivate_tween_finished")
+			# no more sentence to say then tell cutscene player to continue its timeline
+
+
+func _on_deactivate_tween_finished() -> void:
+	# hide parent text box tail
+	parent.text_box_tail.visible = false
+	Shared.cutscene_player.text_box_done()

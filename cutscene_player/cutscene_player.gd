@@ -57,6 +57,8 @@ func _move_camera_down() -> void:
 # get the json dialogue here and pass it to actors
 
 func get_dialogue() -> void:
+	# stop the timeline
+	stop(false)
 	var json_file_path: String = "res://dialogues/intro_cutscene_dialogue.json"
 	# exist?
 	if File.new().file_exists(json_file_path):
@@ -70,11 +72,27 @@ func get_dialogue() -> void:
 			for entry in result:
 				dialogue_array.append(entry)
 			# read dialogue and order which actor should talk
-			# next time loop over this, now there is only one
+			# have the actor call a func here when they are done, it will then increase the dialogue index
+			# when dialogue index reached the end, the timeline starts again
 			var actor = dialogue_array[dialogue_index]["Actor"]
 			var sentences = dialogue_array[dialogue_index]["Sentences"]
 			if actor == "Ryoko":
-				Shared.ryoko.text_box.sentences = sentences
+				# activate actor text_box and send them its sentences
+				Shared.ryoko.text_box.activate(sentences)
+			dialogue_index += 1
+	
+# called by text box when it has done tying all the sentences
+func text_box_done() -> void:
+	if dialogue_index < len(dialogue_array):
+		# when dialogue index reached the end, the timeline starts again
+		var actor = dialogue_array[dialogue_index]["Actor"]
+		var sentences = dialogue_array[dialogue_index]["Sentences"]
+		if actor == "Ryoko":
+			# activate actor text_box and send them its sentences
+			Shared.ryoko.text_box.activate(sentences)
+		dialogue_index += 1
+	elif dialogue_index == len(dialogue_array):
+		play("intro")
 	
 # procedure to return control to player, set camera limit and attach player to camera
 

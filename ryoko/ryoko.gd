@@ -40,6 +40,8 @@ func _ready() -> void:
 	animator.play("idle")
 	# add myself to shared autoload
 	Shared.ryoko = self
+	# hide my textbox tail at start
+	text_box_tail.visible = false
 
 
 func _physics_process(_delta: float) -> void:
