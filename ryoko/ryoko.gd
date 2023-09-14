@@ -3,6 +3,7 @@ extends KinematicBody2D
 
 # for cutscene player to use (indirectly through me)
 onready var remote_transform: RemoteTransform2D = $"%remote_transform_2d"
+onready var text_box: Control = $"%text_box"
 
 # for text_box to find
 onready var text_box_tail: Sprite = $"%text_box_tail"

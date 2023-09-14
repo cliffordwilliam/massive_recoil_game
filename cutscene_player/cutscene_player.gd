@@ -9,6 +9,10 @@ extends AnimationPlayer
 # while conversations are all stored in json for easy use in the long run
 
 
+var dialogue_array: Array = []
+var dialogue_index: int = 0
+
+
 func _ready() -> void:
 	# add self to shared for rooms or world to use
 	Shared.cutscene_player = self
@@ -50,6 +54,30 @@ func _move_camera_down() -> void:
 	# 1500 frames long in 60fps
 	Shared.camera.intro_animation_move_down()
 	
+# get the json dialogue here and pass it to actors
+
+func get_dialogue() -> void:
+	var json_file_path: String = "res://dialogues/intro_cutscene_dialogue.json"
+	# exist?
+	if File.new().file_exists(json_file_path):
+		var file = File.new()
+		if file.open(json_file_path, File.READ) == OK:
+			var json_text = file.get_as_text()
+			file.close()
+			# exist, parse it
+			var result = parse_json(json_text)
+			# turn it into an array
+			for entry in result:
+				dialogue_array.append(entry)
+			# read dialogue and order which actor should talk
+			# next time loop over this, now there is only one
+			var actor = dialogue_array[dialogue_index]["Actor"]
+			var sentences = dialogue_array[dialogue_index]["Sentences"]
+			if actor == "Ryoko":
+				Shared.ryoko.text_box.sentences = sentences
+	
+# procedure to return control to player, set camera limit and attach player to camera
+
 func _set_camera_limit_to_room_limit() -> void:
 	# world scene set camera limit to room limit
 	Shared.tree.current_scene.update_camera_limit()

@@ -12,7 +12,7 @@ onready var typer: AnimationPlayer = $"%typer"
 
 # travel through the sentences
 var sentence_index: int = 0
-# this is supposed to be passed by someone outside not here
+# this is supposed to be passed by someone outside not here (the values)
 var sentences: Array = [
 	"Hellooooooooooo",
 	"Hey",
@@ -65,9 +65,10 @@ func _process(delta: float) -> void:
 		background.visible = false
 		background_tween.visible = true
 		# tween the background tween from old to new position
+		# do not move actors during tweening
 		var tw = create_tween().set_parallel()
-		tw.tween_property(background_tween, "rect_global_position", background.rect_global_position, 2.5).from(old_background_global_position).set_trans(Tween.EASE_IN_OUT)
-		tw.tween_property(background_tween, "rect_size", background.rect_size, 2.5).from(old_background_size).set_trans(Tween.EASE_IN_OUT)
+		tw.tween_property(background_tween, "rect_global_position", background.rect_global_position, 0.1).from(old_background_global_position).set_trans(Tween.TRANS_LINEAR)
+		tw.tween_property(background_tween, "rect_size", background.rect_size, 0.1).from(old_background_size).set_trans(Tween.TRANS_LINEAR)
 		tw.connect("finished", self, "_on_tween_finished")
 		# update old background size to updated value
 		old_background_size = background.rect_size
