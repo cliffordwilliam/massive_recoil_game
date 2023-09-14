@@ -11,6 +11,7 @@ func _ready() -> void:
 func intro_animation_position_self_to_starting_position() -> void:
 	global_position = Vector2(320.0, -180.0)
 	# update camera position to within limit without smoothing
+	reset_smoothing()
 
 # move down by 640 px in 2.5 seconds
 func intro_animation_move_down() -> void:

@@ -39,15 +39,15 @@ func update_camera_limit() -> void:
 	# get room limit
 	var room_camera_limit: ReferenceRect = room.get_node("camera_limits")
 	# get room camera limit data
-	var room_camera_limit_left: int = room_camera_limit.rect_position.x
-	var room_camera_limit_top: int = room_camera_limit.rect_position.y
-	var room_camera_limit_right: int = room_camera_limit.rect_position.x + room_camera_limit.rect_size.x
-	var room_camera_limit_bottom: int = room_camera_limit.rect_position.y + room_camera_limit.rect_size.y
+	var room_camera_limit_left: float = room_camera_limit.rect_position.x
+	var room_camera_limit_top: float = room_camera_limit.rect_position.y
+	var room_camera_limit_right: float = room_camera_limit.rect_position.x + room_camera_limit.rect_size.x
+	var room_camera_limit_bottom: float = room_camera_limit.rect_position.y + room_camera_limit.rect_size.y
 	# update camera to room limit
-	camera.limit_left = room_camera_limit_left
-	camera.limit_top = room_camera_limit_top
-	camera.limit_right = room_camera_limit_right
-	camera.limit_bottom = room_camera_limit_bottom
+	camera.limit_left = int(room_camera_limit_left)
+	camera.limit_top = int(room_camera_limit_top)
+	camera.limit_right = int(room_camera_limit_right)
+	camera.limit_bottom = int(room_camera_limit_bottom)
 	# update camera position to within limit without smoothing
 	camera.reset_smoothing()
 
@@ -76,3 +76,5 @@ func remove_camera_limit() -> void:
 	camera.limit_top = -10000000
 	camera.limit_right = 10000000
 	camera.limit_bottom = 10000000
+	# update camera position to within limit without smoothing
+	camera.reset_smoothing()

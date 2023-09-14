@@ -1,0 +1,98 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://text_box/text_box.png" type="Texture" id=2]
+[ext_resource path="res://text_box/text_box_indicator.png" type="Texture" id=3]
+[ext_resource path="res://text_box/text_box.gd" type="Script" id=4]
+
+[sub_resource type="Animation" id=1]
+resource_name = "default"
+length = 0.0333333
+loop = true
+step = 0.0166667
+tracks/0/type = "method"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "type_letter"
+} ]
+}
+
+[node name="text_box" type="Control"]
+script = ExtResource( 4 )
+__meta__ = {
+"_editor_description_": "by design actors should speak near the bottom, if the actors are too close to the ceilling the text_box will be clipped outside. text boxes are always going to be on actors head no matter what."
+}
+
+[node name="label" type="Label" parent="."]
+unique_name_in_owner = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_top = -23.0
+margin_bottom = -8.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+valign = 1
+__meta__ = {
+"_editor_description_": "This grows sideways, parent also. Extra text spacing bottom -6 to make sure that the top and bottom spacing are equal and there is a 9px gap between lines. This has to be shrink center size flag otherwise setting to a shorter string will not shrink the label. This has to be amchored center as well, with a vertical offset where the parent is at base."
+}
+
+[node name="background" type="NinePatchRect" parent="label"]
+unique_name_in_owner = true
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -14.0
+margin_top = -8.0
+margin_right = 14.0
+margin_bottom = 8.0
+texture = ExtResource( 2 )
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+__meta__ = {
+"_editor_description_": "Need to follow label, use the control margin property to add negative margin"
+}
+
+[node name="indicator" type="TextureRect" parent="label/background"]
+unique_name_in_owner = true
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -9.0
+margin_top = -7.0
+margin_right = -5.0
+margin_bottom = -5.0
+texture = ExtResource( 3 )
+
+[node name="background_tween" type="NinePatchRect" parent="label"]
+unique_name_in_owner = true
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -14.0
+margin_top = -8.0
+margin_right = 14.0
+margin_bottom = 8.0
+texture = ExtResource( 2 )
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+__meta__ = {
+"_editor_description_": "Need to follow label, use the control margin property to add negative margin"
+}
+
+[node name="typer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+anims/default = SubResource( 1 )

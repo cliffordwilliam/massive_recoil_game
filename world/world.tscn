@@ -89,7 +89,14 @@ remote_path = NodePath("../../../camera")
 unique_name_in_owner = true
 position = Vector2( 64, 0 )
 
+[node name="cutscene_player" parent="." instance=ExtResource( 3 )]
+
+[node name="stage_title_layer" type="CanvasLayer" parent="."]
+
+[node name="stage_title" parent="stage_title_layer" instance=ExtResource( 6 )]
+
 [node name="curtain_layer" type="CanvasLayer" parent="."]
+layer = 2
 
 [node name="curtain" type="ColorRect" parent="curtain_layer"]
 anchor_right = 1.0
@@ -102,11 +109,5 @@ anims/RESET = SubResource( 1 )
 anims/intro_fade_out_curtain_from_black = SubResource( 3 )
 anims/room_fade = SubResource( 2 )
 script = ExtResource( 4 )
-
-[node name="cutscene_player" parent="." instance=ExtResource( 3 )]
-
-[node name="stage_title_layer" type="CanvasLayer" parent="."]
-
-[node name="stage_title" parent="stage_title_layer" instance=ExtResource( 6 )]
 
 [editable path="ryoko"]
