@@ -1,8 +1,24 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
+[ext_resource path="res://text_box/text_box_indicator.png" type="Texture" id=1]
 [ext_resource path="res://text_box/text_box.png" type="Texture" id=2]
-[ext_resource path="res://text_box/text_box_indicator.png" type="Texture" id=3]
 [ext_resource path="res://text_box/text_box.gd" type="Script" id=4]
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 4, 3 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 1 )
+region = Rect2( 4, 0, 4, 3 )
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ SubResource( 2 ), SubResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 2.0
+} ]
 
 [sub_resource type="Animation" id=1]
 resource_name = "default"
@@ -33,16 +49,19 @@ __meta__ = {
 [node name="label" type="Label" parent="."]
 unique_name_in_owner = true
 anchor_left = 0.5
-anchor_top = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.5
+anchor_bottom = 1.0
+margin_left = -6.0
 margin_top = -23.0
+margin_right = 6.0
 margin_bottom = -8.0
 grow_horizontal = 2
+grow_vertical = 0
 size_flags_horizontal = 4
-valign = 1
+valign = 2
 __meta__ = {
-"_editor_description_": "This grows sideways, parent also. Extra text spacing bottom -6 to make sure that the top and bottom spacing are equal and there is a 9px gap between lines. This has to be shrink center size flag otherwise setting to a shorter string will not shrink the label. This has to be amchored center as well, with a vertical offset where the parent is at base."
+"_editor_description_": "This grows sideways, parent also. Extra text spacing bottom -6 to make sure that the top and bottom spacing are equal and there is a 9px gap between lines. This has to be shrink center size flag otherwise setting to a shorter string will not shrink the label. This has to be amchored center as well, with a vertical offset where the parent is at base. Vertical grow should be begin to make the text grow up on label"
 }
 
 [node name="background" type="NinePatchRect" parent="label"]
@@ -50,9 +69,9 @@ unique_name_in_owner = true
 show_behind_parent = true
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -14.0
+margin_left = -10.0
 margin_top = -8.0
-margin_right = 14.0
+margin_right = 10.0
 margin_bottom = 8.0
 texture = ExtResource( 2 )
 patch_margin_left = 3
@@ -63,30 +82,30 @@ __meta__ = {
 "_editor_description_": "Need to follow label, use the control margin property to add negative margin"
 }
 
-[node name="indicator" type="TextureRect" parent="label/background"]
-unique_name_in_owner = true
+[node name="indicator_anchor" type="Control" parent="label/background"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -9.0
 margin_top = -7.0
-margin_right = -5.0
-margin_bottom = -5.0
-texture = ExtResource( 3 )
+margin_right = -9.0
+margin_bottom = -7.0
+
+[node name="indicator" type="AnimatedSprite" parent="label/background/indicator_anchor"]
+unique_name_in_owner = true
+frames = SubResource( 4 )
+centered = false
 
 [node name="background_tween" type="NinePatchRect" parent="label"]
 unique_name_in_owner = true
 show_behind_parent = true
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -14.0
-margin_top = -15.5
-margin_right = 14.0
-margin_bottom = 15.5
-grow_horizontal = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -10.0
+margin_top = -8.0
+margin_right = 10.0
+margin_bottom = 8.0
 texture = ExtResource( 2 )
 patch_margin_left = 3
 patch_margin_top = 3

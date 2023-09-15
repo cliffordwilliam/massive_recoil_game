@@ -6,7 +6,7 @@ onready var remote_transform: RemoteTransform2D = $"%remote_transform_2d"
 onready var text_box: Control = $"%text_box"
 
 # for text_box to find
-onready var text_box_tail: Sprite = $"%text_box_tail"
+onready var text_box_tail: AnimatedSprite = $"%text_box_tail"
 
 # refs
 onready var sprite: Sprite = $"%sprite"
@@ -40,8 +40,6 @@ func _ready() -> void:
 	animator.play("idle")
 	# add myself to shared autoload
 	Shared.ryoko = self
-	# hide my textbox tail at start
-	text_box_tail.visible = false
 
 
 func _physics_process(_delta: float) -> void:
@@ -126,3 +124,15 @@ func remove_control() -> void:
 	
 func return_control() -> void:
 	is_controllable = true
+
+
+func move_left() -> void:
+	direction = -1
+
+
+func move_right() -> void:
+	direction = 1
+
+
+func stop_moving() -> void:
+	direction = 0

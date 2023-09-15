@@ -9,6 +9,13 @@ extends AnimationPlayer
 # while conversations are all stored in json for easy use in the long run
 
 
+# store all cutscene 1 paths
+var cutscene_1_json_path_array: Array = [
+	"res://dialogues/intro_cutscene_dialogue.json",
+	"res://dialogues/intro_cutscene_dialogue_2.json"
+]
+var json_path_array_index: int = 0  # do not forget to reset this every time cutscene is over
+
 var dialogue_array: Array = []
 var dialogue_index: int = 0
 
@@ -16,6 +23,13 @@ var dialogue_index: int = 0
 func _ready() -> void:
 	# add self to shared for rooms or world to use
 	Shared.cutscene_player = self
+	# set input false at start
+	set_process_input(false)
+
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("pause"):
+		pass
 
 
 # INTRO ANIMATION
@@ -57,9 +71,10 @@ func _move_camera_down() -> void:
 # get the json dialogue here and pass it to actors
 
 func get_dialogue() -> void:
-	# stop the timeline
+	# stop / pause the timeline
 	stop(false)
-	var json_file_path: String = "res://dialogues/intro_cutscene_dialogue.json"
+	var json_file_path: String = cutscene_1_json_path_array[json_path_array_index]
+	json_path_array_index += 1
 	# exist?
 	if File.new().file_exists(json_file_path):
 		var file = File.new()
@@ -79,9 +94,11 @@ func get_dialogue() -> void:
 			if actor == "Ryoko":
 				# activate actor text_box and send them its sentences
 				Shared.ryoko.text_box.activate(sentences)
+			elif actor == "Radio":
+				Shared.radio.text_box.activate(sentences)
 			dialogue_index += 1
 	
-# called by text box when it has done tying all the sentences
+# called by text box when it has done typing all the sentences
 func text_box_done() -> void:
 	if dialogue_index < len(dialogue_array):
 		# when dialogue index reached the end, the timeline starts again
@@ -90,10 +107,19 @@ func text_box_done() -> void:
 		if actor == "Ryoko":
 			# activate actor text_box and send them its sentences
 			Shared.ryoko.text_box.activate(sentences)
+		elif actor == "Radio":
+			Shared.radio.text_box.activate(sentences)
 		dialogue_index += 1
 	elif dialogue_index == len(dialogue_array):
 		play("intro")
 	
+	
+func _ryoko_move_right() -> void:
+	Shared.ryoko.move_right()
+	
+	
+func _ryoko_stop_moving() -> void:
+	Shared.ryoko.stop_moving()
 # procedure to return control to player, set camera limit and attach player to camera
 
 func _set_camera_limit_to_room_limit() -> void:
@@ -104,11 +130,18 @@ func _attach_ryoko_remote_transform_to_camera() -> void:
 	# detach ryoko remote transform from camera
 	Shared.ryoko.attach_camera()
 
+# this is basically the end of cutscene
 func _return_ryoko_control() -> void:
 	Shared.ryoko.return_control()
+	# reset this index always every after cutscene, this is to travel the diff array paths of the json path
+	json_path_array_index = 0
 	
-# fade out curtain from black
-# detach camera from player
-# remove limit
-# have the camera be one screen on top where it is should be in room 0
-# move camera down to where it is supposed to be
+# this also activates input to listen to the skip prompt
+func _show_skip_cutscene_prompt() -> void:
+	set_process_input(true)
+	Shared.skip_cutscene_prompt.visible = true
+
+
+func _hide_skip_cutscene_prompt() -> void:
+	set_process_input(false)
+	Shared.skip_cutscene_prompt.visible = false

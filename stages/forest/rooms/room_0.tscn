@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://world/water.tscn" type="PackedScene" id=1]
 [ext_resource path="res://stages/forest/images/s_grass.png" type="Texture" id=2]
@@ -14,6 +14,7 @@
 [ext_resource path="res://stages/forest/images/tree.png" type="Texture" id=12]
 [ext_resource path="res://stages/forest/images/t_grass.png" type="Texture" id=13]
 [ext_resource path="res://stages/forest/images/mountain.png" type="Texture" id=14]
+[ext_resource path="res://radio/radio.tscn" type="PackedScene" id=15]
 
 [node name="room_0" type="Node2D"]
 script = ExtResource( 5 )
@@ -175,5 +176,8 @@ position = Vector2( 288, 249 )
 __meta__ = {
 "_editor_description_": "when the player first fresh start the game, this is where they spawn."
 }
+
+[node name="radio" parent="." instance=ExtResource( 15 )]
+position = Vector2( 160, 192 )
 
 [connection signal="tree_exiting" from="." to="." method="_on_room_0_tree_exiting"]

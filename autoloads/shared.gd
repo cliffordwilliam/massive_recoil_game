@@ -21,3 +21,9 @@ var curtain_animator
 
 # state title text for cutscene player to use
 var stage_title
+
+# radio actor for cutscene player to use
+var radio
+
+# skip_cutscene_prompt
+var skip_cutscene_prompt

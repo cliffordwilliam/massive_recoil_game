@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://skip_cutscene_prompt/skip_cutscene_prompt.gd" type="Script" id=1]
+
+[node name="skip_cutscene_prompt" type="Label"]
+margin_left = 480.0
+margin_top = 320.0
+margin_right = 589.0
+margin_bottom = 335.0
+text = "skip - pause button"
+script = ExtResource( 1 )

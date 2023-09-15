@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://world/world.gd" type="Script" id=1]
 [ext_resource path="res://camera/camera.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://world/curtain.gd" type="Script" id=4]
 [ext_resource path="res://ryoko/ryoko.tscn" type="PackedScene" id=5]
 [ext_resource path="res://stages/forest/stage_title/stage_title.tscn" type="PackedScene" id=6]
+[ext_resource path="res://skip_cutscene_prompt/skip_cutscene_prompt.tscn" type="PackedScene" id=7]
 
 [sub_resource type="Animation" id=1]
 length = 0.001
@@ -94,6 +95,8 @@ position = Vector2( 64, 0 )
 [node name="stage_title_layer" type="CanvasLayer" parent="."]
 
 [node name="stage_title" parent="stage_title_layer" instance=ExtResource( 6 )]
+
+[node name="skip_cutscene_prompt" parent="stage_title_layer" instance=ExtResource( 7 )]
 
 [node name="curtain_layer" type="CanvasLayer" parent="."]
 layer = 2

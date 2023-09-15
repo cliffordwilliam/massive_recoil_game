@@ -1,0 +1,55 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://radio/radio.gd" type="Script" id=1]
+[ext_resource path="res://text_box/text_box_tail.png" type="Texture" id=2]
+[ext_resource path="res://text_box/text_box_tail.tscn" type="PackedScene" id=3]
+[ext_resource path="res://text_box/text_box.tscn" type="PackedScene" id=4]
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 2 )
+region = Rect2( 12, 0, 6, 4 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 2 )
+region = Rect2( 6, 0, 6, 4 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 6, 4 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 6, 4 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 2 )
+region = Rect2( 6, 0, 6, 4 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 2 )
+region = Rect2( 12, 0, 6, 4 )
+
+[sub_resource type="SpriteFrames" id=15]
+animations = [ {
+"frames": [ SubResource( 9 ), SubResource( 10 ), SubResource( 11 ) ],
+"loop": false,
+"name": "hide",
+"speed": 30.0
+}, {
+"frames": [ SubResource( 12 ), SubResource( 13 ), SubResource( 14 ) ],
+"loop": false,
+"name": "show",
+"speed": 30.0
+} ]
+
+[node name="radio" type="Node2D"]
+script = ExtResource( 1 )
+__meta__ = {
+"_editor_description_": "for any actor talking off scene from a radio"
+}
+
+[node name="text_box" parent="." instance=ExtResource( 4 )]
+unique_name_in_owner = true
+
+[node name="text_box_tail" parent="." instance=ExtResource( 3 )]
+frames = SubResource( 15 )
