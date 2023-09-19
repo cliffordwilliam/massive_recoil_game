@@ -1,0 +1,56 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://tiles/collision.tres" type="TileSet" id=1]
+[ext_resource path="res://rooms/room.gd" type="Script" id=2]
+[ext_resource path="res://door/door.tscn" type="PackedScene" id=3]
+
+[node name="room_0" type="Node2D"]
+script = ExtResource( 2 )
+__meta__ = {
+"_editor_description_": "Room only holds tile collision and also the room decorations.
+
+But not the background. Background are another set of things like sets of rooms.
+
+All room have camera limit and loaded rooms have ryoko_spawn point"
+}
+camera_limit = NodePath("camera_limit")
+ryoko_spawn_point = NodePath("ryoko_spawn")
+background_origin = NodePath("background_origin")
+new_background = 1
+
+[node name="collision" type="TileMap" parent="."]
+tile_set = ExtResource( 1 )
+cell_size = Vector2( 32, 32 )
+collision_mask = 0
+format = 1
+tile_data = PoolIntArray( 589825, 2, 0, 589826, 2, 0, 589827, 2, 0, 589828, 2, 0, 589829, 2, 0, 589830, 2, 0, 589831, 2, 0, 589832, 2, 0, 589833, 2, 0, 589834, 2, 0, 589835, 2, 0, 589836, 2, 0, 589837, 2, 0, 589838, 2, 0, 589839, 2, 0, 589840, 2, 0, 589841, 2, 0, 589842, 2, 0, 589845, 2, 0, 589846, 2, 0, 589847, 2, 0, 589848, 2, 0, 589849, 2, 0, 589850, 2, 0, 589851, 2, 0, 589852, 2, 0, 589853, 2, 0, 589854, 2, 0, 589855, 2, 0, 589856, 2, 0, 589857, 2, 0, 589858, 2, 0, 589859, 2, 0, 589860, 2, 0, 589861, 2, 0, 589862, 2, 0, 589865, 2, 0, 589866, 2, 0, 589867, 2, 0, 589868, 2, 0, 589869, 2, 0, 589870, 2, 0, 589871, 2, 0, 589872, 2, 0, 589873, 2, 0, 589874, 2, 0, 589875, 2, 0, 589876, 2, 0, 589877, 2, 0, 589878, 2, 0, 589879, 2, 0, 589880, 2, 0, 589881, 2, 0, 589882, 2, 0 )
+__meta__ = {
+"_editor_description_": "This tile map is on the tiles layer, it is not visible in game, this only holds the collision shapes."
+}
+
+[node name="camera_limit" type="ReferenceRect" parent="."]
+margin_right = 1920.0
+margin_bottom = 360.0
+rect_min_size = Vector2( 640, 360 )
+__meta__ = {
+"_editor_description_": "To add more floors, add (32*11)."
+}
+
+[node name="ryoko_spawn" type="Position2D" parent="."]
+position = Vector2( 960, 288 )
+
+[node name="background_origin" type="Position2D" parent="."]
+position = Vector2( 640, 352 )
+
+[node name="door" parent="." instance=ExtResource( 3 )]
+position = Vector2( -16, 0 )
+__meta__ = {
+"_editor_description_": "position myself 16px outside room edge horizontally.
+
+2.5 tile or 48px vertically
+
+"
+}
+next_room_scene = "res://rooms/room_1.tscn"
+
+[editable path="door"]

@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://door/door.gd" type="Script" id=1]
+
+[node name="door" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource( 1 )
+__meta__ = {
+"_editor_description_": "position myself 16px outside room edge horizontally.
+
+1 tile or 32px vertically
+
+"
+}
+
+[node name="collision" type="CollisionShape2D" parent="."]
+unique_name_in_owner = true
+
+[connection signal="body_entered" from="." to="." method="_on_door_body_entered"]
