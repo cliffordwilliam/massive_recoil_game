@@ -34,7 +34,7 @@ __meta__ = {
 }
 
 [node name="door" parent="." instance=ExtResource( 1 )]
-position = Vector2( -16, 0 )
+position = Vector2( -6, 0 )
 __meta__ = {
 "_editor_description_": "position myself 16px outside room edge horizontally.
 
@@ -45,7 +45,7 @@ __meta__ = {
 next_room_scene = "res://rooms/room_2.tscn"
 
 [node name="door2" parent="." instance=ExtResource( 1 )]
-position = Vector2( 0, 392 )
+position = Vector2( 0, 384 )
 __meta__ = {
 "_editor_description_": "position myself 16px outside room edge horizontally.
 

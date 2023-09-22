@@ -11,11 +11,12 @@ const ROOM_0_SCENE: PackedScene = preload("res://rooms/room_0.tscn")
 
 # list all the backgrounds here associated with each room
 const FOREST_BACKGROUND_SCENE: PackedScene = preload("res://backgrounds/forest_background.tscn")
+const FORTRESS_BACKGROUND_SCENE: PackedScene = preload("res://backgrounds/fortress_background.tscn")
 
 
 var next_room
 var room
-var next_background
+var next_background setget set_next_background
 var background
 
 
@@ -52,8 +53,19 @@ func _ready() -> void:
 	if room.new_background == room.NEW_BACKGROUND.forest:
 		background = FOREST_BACKGROUND_SCENE.instance()
 		add_child(background)
+	
+	#########################
+	# set background origin #
+	#########################
 		
 	background.update_background_origin(room.background_origin)
+		
+	# room has background?
+	if room.background != null:
+		# update room background origin too
+		room.background.update_background_origin(room.background_origin)
+		# hide the default repeated background
+		background.visible = false
 	
 	##################
 	# position ryoko #
@@ -119,6 +131,9 @@ func on_door_ryoko_exit(next_room_scene: PackedScene) -> void:
 
 # called by curtain middle frame when curtain is fully black
 func on_curtain_animator_switch_room_fade_middle() -> void:
+	# unhide the original background if it was hidden
+	background.visible = true
+	
 	# remove old room
 	room.queue_free()
 	
@@ -126,14 +141,39 @@ func on_curtain_animator_switch_room_fade_middle() -> void:
 	room = next_room
 	add_child(room)
 	
+	# instance the next background (if a room has a new one)
+	if room.new_background == room.NEW_BACKGROUND.none:
+		pass
+	elif room.new_background == room.NEW_BACKGROUND.forest:
+		self.next_background = FOREST_BACKGROUND_SCENE.instance()
+	elif room.new_background == room.NEW_BACKGROUND.fortress:
+		self.next_background = FORTRESS_BACKGROUND_SCENE.instance()
+	
 	# update background offset
 	background.update_background_origin(room.background_origin)
+		
+	# room has background?
+	if room.background != null:
+		# update room background origin too
+		room.background.update_background_origin(room.background_origin)
+		# hide the default repeated background
+		background.visible = false
 	
 	# handle camera limit
 	update_camera_limit()
 	
 	# stop ryoko physics_process
 	Shared.ryoko.is_switching_room = false
+
+
+func set_next_background(value) -> void:
+	# update next background with the new instance
+	next_background = value
+	# remove old background
+	background.queue_free()
+	# update background reference and add it as child
+	background = next_background
+	add_child(background)
 
 
 func update_camera_limit() -> void:

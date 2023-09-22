@@ -43,7 +43,7 @@ position = Vector2( 960, 288 )
 position = Vector2( 640, 352 )
 
 [node name="door" parent="." instance=ExtResource( 3 )]
-position = Vector2( -16, 0 )
+position = Vector2( -6, 0 )
 __meta__ = {
 "_editor_description_": "position myself 16px outside room edge horizontally.
 

@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://tiles/collision.tres" type="TileSet" id=1]
 [ext_resource path="res://rooms/room.gd" type="Script" id=2]
 [ext_resource path="res://door/door.tscn" type="PackedScene" id=3]
+[ext_resource path="res://backgrounds/brick_wall.png" type="Texture" id=4]
+[ext_resource path="res://backgrounds/background.gd" type="Script" id=5]
 
 [node name="room_2" type="Node2D"]
 position = Vector2( 0, 352 )
@@ -14,6 +16,8 @@ But not the background. Background are another set of things like sets of rooms.
 }
 camera_limit = NodePath("camera_limit")
 background_origin = NodePath("background_origin")
+background = NodePath("parallax_background")
+new_background = 2
 
 [node name="collision" type="TileMap" parent="."]
 tile_set = ExtResource( 1 )
@@ -34,7 +38,7 @@ __meta__ = {
 }
 
 [node name="door" parent="." instance=ExtResource( 3 )]
-position = Vector2( -16, 0 )
+position = Vector2( -6, 0 )
 __meta__ = {
 "_editor_description_": "position myself 16px outside room edge horizontally.
 
@@ -45,7 +49,7 @@ __meta__ = {
 next_room_scene = "res://rooms/room_1.tscn"
 
 [node name="door2" parent="." instance=ExtResource( 3 )]
-position = Vector2( 1296, 0 )
+position = Vector2( 1286, 0 )
 __meta__ = {
 "_editor_description_": "position myself 16px outside room edge horizontally.
 
@@ -57,3 +61,20 @@ next_room_scene = "res://rooms/room_3.tscn"
 
 [node name="background_origin" type="Position2D" parent="."]
 position = Vector2( 320, 352 )
+
+[node name="parallax_background" type="ParallaxBackground" parent="."]
+script = ExtResource( 5 )
+
+[node name="parallax_layer" type="ParallaxLayer" parent="parallax_background"]
+motion_scale = Vector2( 0.05, 0.03 )
+motion_mirroring = Vector2( 640, 360 )
+__meta__ = {
+"_editor_description_": "Sprite is going to be offset depending on the motion_scale"
+}
+
+[node name="sprite" type="Sprite" parent="parallax_background/parallax_layer"]
+texture = ExtResource( 4 )
+centered = false
+__meta__ = {
+"_editor_description_": ""
+}

@@ -8,9 +8,11 @@ collision_mask = 2
 monitorable = false
 script = ExtResource( 1 )
 __meta__ = {
-"_editor_description_": "position myself 16px outside room edge horizontally.
+"_editor_description_": "position myself 6px outside room edge horizontally.
 
 1 tile or 32px vertically
+
+Ryoko is 5 wide and 31 tall
 
 "
 }
