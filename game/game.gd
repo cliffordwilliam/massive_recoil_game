@@ -7,17 +7,23 @@ var data: Dictionary = {
 }
 
 # list all the loadable rooms here (room with save points or room 0)
-const ROOM_0_SCENE: PackedScene = preload("res://rooms/room_0.tscn")
+const ROOM_0_SCENE: PackedScene = preload("res://rooms/stage_0/room_0.tscn")
 
-# list all the backgrounds here associated with each room
+# list all the repeating backgrounds here associated with each room
 const FOREST_BACKGROUND_SCENE: PackedScene = preload("res://backgrounds/forest_background.tscn")
 const FORTRESS_BACKGROUND_SCENE: PackedScene = preload("res://backgrounds/fortress_background.tscn")
+
+# bg for the train rooms
+const MOVING_FOREST_FOREGROUND_SCENE: PackedScene = preload("res://backgrounds/moving_forest_foreground.tscn")
+const MOVING_FOREST_BACKGROUND_SCENE: PackedScene = preload("res://backgrounds/moving_forest_background.tscn")
 
 
 var next_room
 var room
 var next_background setget set_next_background
 var background
+var next_foreground setget set_next_foreground
+var foreground
 
 
 # read / write the save data
@@ -49,18 +55,27 @@ func _ready() -> void:
 	# spawn background #
 	####################
 	
-	# handle the rest of the backgrounds here
-	if room.new_background == room.NEW_BACKGROUND.forest:
-		background = FOREST_BACKGROUND_SCENE.instance()
-		add_child(background)
+	# handle the rest of the backgrounds here (put this in a func or something, re use in room change)
+	if room.new_background == room.NEW_BACKGROUND.none:
+		pass
+	elif room.new_background == room.NEW_BACKGROUND.train_forest:
+		self.next_foreground = MOVING_FOREST_FOREGROUND_SCENE.instance()
+		self.next_background = MOVING_FOREST_BACKGROUND_SCENE.instance()
+	elif room.new_background == room.NEW_BACKGROUND.forest:
+		self.next_background = FOREST_BACKGROUND_SCENE.instance()
+	elif room.new_background == room.NEW_BACKGROUND.fortress:
+		self.next_background = FORTRESS_BACKGROUND_SCENE.instance()
 	
 	#########################
 	# set background origin #
 	#########################
 		
-	background.update_background_origin(room.background_origin)
+	# room has background origin? (used to update bg origin to that)
+	if room.background_origin != null:
+		# update background offset
+		background.update_background_origin(room.background_origin)
 		
-	# room has background?
+	# room has background? (unique for save rooms, special room with a lake etc)
 	if room.background != null:
 		# update room background origin too
 		room.background.update_background_origin(room.background_origin)
@@ -144,13 +159,18 @@ func on_curtain_animator_switch_room_fade_middle() -> void:
 	# instance the next background (if a room has a new one)
 	if room.new_background == room.NEW_BACKGROUND.none:
 		pass
+	elif room.new_background == room.NEW_BACKGROUND.train_forest:
+		self.next_foreground = MOVING_FOREST_FOREGROUND_SCENE.instance()
+		self.next_background = MOVING_FOREST_BACKGROUND_SCENE.instance()
 	elif room.new_background == room.NEW_BACKGROUND.forest:
 		self.next_background = FOREST_BACKGROUND_SCENE.instance()
 	elif room.new_background == room.NEW_BACKGROUND.fortress:
 		self.next_background = FORTRESS_BACKGROUND_SCENE.instance()
 	
-	# update background offset
-	background.update_background_origin(room.background_origin)
+	# room has background origin? (used to update bg origin to that)
+	if room.background_origin != null:
+		# update background offset
+		background.update_background_origin(room.background_origin)
 		
 	# room has background?
 	if room.background != null:
@@ -166,11 +186,23 @@ func on_curtain_animator_switch_room_fade_middle() -> void:
 	Shared.ryoko.is_switching_room = false
 
 
+func set_next_foreground(value) -> void:
+	# update next background with the new instance
+	next_foreground = value
+	# got old background? remove it
+	if foreground:
+		foreground.queue_free()
+	# update background reference and add it as child
+	foreground = next_foreground
+	add_child(foreground)
+
+
 func set_next_background(value) -> void:
 	# update next background with the new instance
 	next_background = value
-	# remove old background
-	background.queue_free()
+	# got old background? remove it
+	if background:
+		background.queue_free()
 	# update background reference and add it as child
 	background = next_background
 	add_child(background)

@@ -1,0 +1,61 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://backgrounds/horizontal_parallax_layer_scroller.gd" type="Script" id=1]
+[ext_resource path="res://backgrounds/tree.png" type="Texture" id=2]
+[ext_resource path="res://backgrounds/canopy.png" type="Texture" id=3]
+[ext_resource path="res://backgrounds/sky.png" type="Texture" id=4]
+[ext_resource path="res://backgrounds/background.gd" type="Script" id=5]
+
+[node name="moving_forest_background" type="ParallaxBackground"]
+script = ExtResource( 5 )
+
+[node name="layer_0" type="ParallaxLayer" parent="."]
+motion_scale = Vector2( 0, 0 )
+
+[node name="sprite" type="Sprite" parent="layer_0"]
+texture = ExtResource( 4 )
+centered = false
+
+[node name="layer_1" type="ParallaxLayer" parent="."]
+motion_scale = Vector2( 1, 0 )
+motion_mirroring = Vector2( 640, 0 )
+script = ExtResource( 1 )
+speed = -50.0
+
+[node name="sprite" type="Sprite" parent="layer_1"]
+texture = ExtResource( 3 )
+centered = false
+
+[node name="sprite2" type="Sprite" parent="layer_1"]
+position = Vector2( 320, 0 )
+texture = ExtResource( 3 )
+centered = false
+
+[node name="layer_2" type="ParallaxLayer" parent="."]
+motion_scale = Vector2( 0.5, 0 )
+motion_mirroring = Vector2( 640, 0 )
+script = ExtResource( 1 )
+__meta__ = {
+"_editor_description_": "Sprite is going to be offset depending on the motion_scale"
+}
+speed = -500.0
+
+[node name="sprite" type="Sprite" parent="layer_2"]
+position = Vector2( -32, 32 )
+texture = ExtResource( 2 )
+centered = false
+
+[node name="sprite2" type="Sprite" parent="layer_2"]
+position = Vector2( 192, 96 )
+texture = ExtResource( 2 )
+centered = false
+
+[node name="sprite3" type="Sprite" parent="layer_2"]
+position = Vector2( 320, 32 )
+texture = ExtResource( 2 )
+centered = false
+
+[node name="sprite4" type="Sprite" parent="layer_2"]
+position = Vector2( 448, 0 )
+texture = ExtResource( 2 )
+centered = false

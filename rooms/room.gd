@@ -8,5 +8,5 @@ export(NodePath) onready var background_origin = get_node(background_origin) as 
 export(NodePath) onready var background = get_node(background) as ParallaxBackground if background else null
 
 # set this for room that changes the repeating background (like the first room of a new stage)
-enum NEW_BACKGROUND { none, forest, fortress }
+enum NEW_BACKGROUND { none, train_forest, forest, fortress }
 export(NEW_BACKGROUND) var new_background = NEW_BACKGROUND.none
